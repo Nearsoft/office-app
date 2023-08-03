@@ -1,5 +1,6 @@
 package com.encora_office.app.models;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 public class User {
 
 	@Id
+	@GeneratedValue
 	private String id;
 
 	private String name;
@@ -19,29 +21,39 @@ public class User {
 	private String email;
 	private String role;
 	private boolean admin;
-	private PasswordEncoder password;
 
 	// constructor
 
-	public User(String name, String lastName, String email, String role, PasswordEncoder password, boolean admin) {
+	public User(String name, String lastName, String email, String role, boolean admin) {
 		super();
 		this.name = name;
 		this.lastName = lastName;
 		this.email = email;
 		this.role = role;
-		this.password = password;
 		this.admin = admin;
 	}
 
 	public String getFullName() {
-		return name + " " + lastName;
+		return this.name + " " + this.lastName;
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public String getRole() {
-		return role;
+		return this.role;
+	}
+
+	public String getId() {
+		return this.id;
+	}
+
+	public String role() {
+		return this.role;
+	}
+
+	public boolean admin() {
+		return this.admin;
 	}
 }

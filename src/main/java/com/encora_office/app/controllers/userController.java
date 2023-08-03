@@ -6,11 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 import com.encora_office.app.models.User;
 /*
  * HTTP status code should be managed in here for best practices. 
@@ -32,24 +28,27 @@ public class userController {
 	public List<User> getUsers() {
 		return userService.getUsers();
 	}
-	// @PostMapping("/user")
-	// public ResponseEntity<?> createUser(@RequestBody User user) throws Exception
-	// {
-	// UserService.save(user);
-	// return ResponseEntity.ok().build();
-	// }
 
-	// @GetMapping("/user/{id}")
-	// public Optional<User> getUser(String id) {
-	// return UserService.findById(id);
-	// }
+	@PostMapping("/users")
+	public ResponseEntity<User> createUser(@RequestBody User user) {
+		return ResponseEntity.ok(userService.createUser(user));
+	}
 
-	// @PutMapping("/user/{id}")
-	// public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody
-	// User user) {
-	// List<User> userToUpdate = UserService.findById(id);
+	@GetMapping("/users/{id}")
+	public Optional<User> getUser(@PathVariable String id) {
+		return userService.findById(id);
+	}
 
-	// return ResponseEntity.ok().build();
+	@PutMapping("/users/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+		Optional<User> userToUpdate = getUser(id);
 
-	// }
+		System.out.println(userToUpdate);
+
+		if (!userToUpdate.isPresent())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(userService.updateUser(user));
+
+	}
 }

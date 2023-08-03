@@ -13,11 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	private String name;
-	private String email;
-	private String password;
-	private String role;
-
 	// Dependency injection
 	@Autowired
 	private final UserRepository userRepository;
@@ -35,8 +30,25 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
+	public Optional<User> findById(String id) {
+		return userRepository.findById(id);
+	}
+
 	public List<User> getUsers() {
 		return userRepository.findAll();
 	}
 
+	public User createUser(User user) {
+		return userRepository.save(user);
+	}
+
+	public User updateUser(User user) {
+		Optional<User> userToUpdate = userRepository.findById(user.getId());
+		try {
+			return userRepository.save(user);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 }

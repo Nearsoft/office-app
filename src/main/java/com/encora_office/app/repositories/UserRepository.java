@@ -11,9 +11,9 @@ import com.encora_office.app.models.User;
 @Repository
 // Need to understand better how the connection with MongoDB works.
 public interface UserRepository extends MongoRepository<User, String> {
-	User findById(Integer id);
+	// User findById(Integer id);
 
-	List<User> findAll();
+	// List<User> findAll();
 
 	// User createUser(User user);
 
