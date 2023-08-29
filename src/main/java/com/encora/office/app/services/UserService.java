@@ -1,36 +1,27 @@
-package com.encora_office.app.services;
+package com.encora.office.app.services;
 
 import java.util.*;
 
-import com.encora_office.app.models.User;
-import com.encora_office.app.repositories.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.encora.office.app.models.entity.User;
+import com.encora.office.app.repositories.UserRepository;
 
 /*
  * The service layer is where all the business logic is written.
  */
+@Slf4j
 @Service
+@AllArgsConstructor
 public class UserService {
 
-	// Dependency injection
-	@Autowired
 	private final UserRepository userRepository;
 
-	// public UserService(UserRepository userRepository) {
-	// this.userRepository = userRepository;
-	// }
-
-	public UserService(UserRepository userRepository) {
-		// super();
-		// this.name = name;
-		// this.email = email;
-		// this.password = password;
-		// this.role = role;
-		this.userRepository = userRepository;
-	}
-
 	public Optional<User> findById(String id) {
+		log.debug("Trying to retrieve user with id: {}", id);
 		return userRepository.findById(id);
 	}
 

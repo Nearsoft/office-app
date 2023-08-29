@@ -1,1 +1,6 @@
 data/db
+.vscode/*
+mongo-volume/*
+.idea/
+target/
+target/

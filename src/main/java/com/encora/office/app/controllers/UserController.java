@@ -1,54 +1,52 @@
-package com.encora_office.app.controllers;
+package com.encora.office.app.controllers;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import com.encora_office.app.models.User;
-/*
- * HTTP status code should be managed in here for best practices. 
- */
-import com.encora_office.app.services.UserService;
+import com.encora.office.app.models.entity.User;
+import com.encora.office.app.services.UserService;
 
+import static com.encora.office.app.constants.Resources.USERS;
+
+@Slf4j
 @RestController
-@RequestMapping("/api")
-public class userController {
+@AllArgsConstructor
+@RequestMapping(USERS)
+public class UserController {
 
-	@Autowired
 	private final UserService userService;
 
-	public userController(UserService userRepository) {
-		this.userService = userRepository;
-	}
-
-	@GetMapping("/users")
+	@GetMapping
 	public List<User> getUsers() {
+		log.debug("Retrieve all users");
+
 		return userService.getUsers();
 	}
 
-	@PostMapping("/users")
+	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody User user) {
 		return ResponseEntity.ok(userService.createUser(user));
 	}
 
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public Optional<User> getUser(@PathVariable String id) {
 		return userService.findById(id);
 	}
 
-	@PutMapping("/users/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
 		Optional<User> userToUpdate = getUser(id);
 
-		System.out.println(userToUpdate);
+		log.debug("User to update: {}", userToUpdate);
 
 		if (!userToUpdate.isPresent())
 			return ResponseEntity.notFound().build();
 
 		return ResponseEntity.ok(userService.updateUser(user));
-
 	}
 }

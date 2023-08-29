@@ -1,0 +1,25 @@
+
+
+spring:
+  profiles:
+    include: database
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    ROOT: INFO
+    com.encora.office.app: DEBUG
+    org.mongodb.driver.cluster: ERROR
+    org.mongodb.driver.protocol.command: ERROR
+
+
+jwt:
+  expiration: 86400000 # Expiration time in ms (24h)
+  signature-algorithm: HS512
