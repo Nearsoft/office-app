@@ -3,11 +3,11 @@ module.exports = {
   env: { browser: true, es2020: true },
   extends: [
     'eslint:recommended',
+    'plugin:react/recommended',
     'plugin:import/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/stylistic-type-checked',
-    'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'eslint-config-prettier',
   ],
@@ -28,6 +28,9 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
+    ecmaFeatures: {
+      jsx: true,
+    },
     sourceType: 'module',
     project: ['./tsconfig.json', './tsconfig.node.json'],
     tsconfigRootDir: __dirname,
@@ -35,9 +38,9 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'import/named': 0,
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+    'react/react-in-jsx-scope': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
 };
