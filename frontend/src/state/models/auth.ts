@@ -24,7 +24,6 @@ export const auth = createModel<RootModel>()({
   effects: (dispatch) => ({
     async loginRequest(payload: { username: string; password: string }) {
       const { username, password } = payload;
-      // dispatch.auth.setAuthentication(token);
       console.log(username);
       console.log(password);
       await delay(500);
