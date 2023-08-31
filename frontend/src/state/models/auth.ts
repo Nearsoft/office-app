@@ -1,6 +1,9 @@
 import { createModel } from '@rematch/core';
-import { delay } from './utils';
+
 import type { RootModel } from '.';
+import { delay } from './utils';
+
+// import { ApiService } from '../service/api.service';
 
 export interface AuthState {
   token: string | null;
@@ -8,18 +11,24 @@ export interface AuthState {
 }
 
 const initialState: AuthState = { token: null, isAuthenticated: false };
+// const api = ApiService.getInstance(); TODO: make sure that implemented singleton
 
 export const auth = createModel<RootModel>()({
   state: initialState,
   reducers: {
-    setAuthentication: (state, token: string | null = null) => {
+    SET_AUTHENTICATION: (state, token: string | null = null) => {
+      console.log('called');
       return { ...state, token };
     },
   },
   effects: (dispatch) => ({
-    async incrementAsync() {
+    async loginRequest(payload: { username: string; password: string }) {
+      const { username, password } = payload;
+      // dispatch.auth.setAuthentication(token);
+      console.log(username);
+      console.log(password);
       await delay(500);
-      dispatch.auth.setAuthentication();
+      dispatch.auth.SET_AUTHENTICATION(username); // TODO: this is only a mock value
     },
   }),
 });
