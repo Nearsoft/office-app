@@ -17,15 +17,12 @@ export const auth = createModel<RootModel>()({
   state: initialState,
   reducers: {
     SET_AUTHENTICATION: (state, token: string | null = null) => {
-      console.log('called');
-      return { ...state, token };
+      return { ...state, token, isAuthenticated: true };
     },
   },
   effects: (dispatch) => ({
     async loginRequest(payload: { username: string; password: string }) {
       const { username, password } = payload;
-      // dispatch.auth.setAuthentication(token);
-      console.log(username);
       console.log(password);
       await delay(500);
       dispatch.auth.SET_AUTHENTICATION(username); // TODO: this is only a mock value
