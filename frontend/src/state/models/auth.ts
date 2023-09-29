@@ -1,9 +1,6 @@
 import { createModel } from '@rematch/core';
 
 import type { RootModel } from '.';
-import { delay } from './utils';
-
-// import { ApiService } from '../service/api.service';
 
 export interface AuthState {
   token: string | null;
@@ -20,12 +17,4 @@ export const auth = createModel<RootModel>()({
       return { ...state, token, isAuthenticated: true };
     },
   },
-  effects: (dispatch) => ({
-    async loginRequest(payload: { username: string; password: string }) {
-      const { username, password } = payload;
-      console.log(password);
-      await delay(500);
-      dispatch.auth.SET_AUTHENTICATION(username);
-    },
-  }),
 });
