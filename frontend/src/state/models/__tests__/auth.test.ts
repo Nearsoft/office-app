@@ -16,8 +16,8 @@ describe('[auth] model', () => {
 
   it('effect: loginRequest', async () => {
     const userCrendentials = {
-      username: "username",
-      password: "password"
+      username: 'username',
+      password: 'password',
     };
     const store = init<RootModel>({
       models,
