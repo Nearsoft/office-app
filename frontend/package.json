@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@rematch/core": "^2.2.0",
-    "@rematch/loading": "^2.1.2",
     "@tanstack/react-query": "^4.35.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
