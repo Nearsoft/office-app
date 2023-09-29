@@ -1,29 +1,19 @@
-import { useSelector } from 'react-redux';
-
-import { useMutation } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
-import { LoginMutation } from './state/service/api.service';
-import { RootState } from './state/store';
+import { Dispatch, RootState } from './state/store';
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<Dispatch>();
 
-  const mutation = useMutation({
-    mutationFn: LoginMutation,
-  });
-
-  const loginRequest = (): void =>
-    mutation.mutate({ email: 'email@domain.com', password: 'password' });
-
-  if (mutation.isLoading) {
-    return 'Loading..';
-  }
+  const loginRequest = (): Promise<void> =>
+    dispatch.auth.loginRequest({ username: 'username', password: 'password' });
 
   return (
     <>
       {auth.isAuthenticated}
-      <button onClick={() => loginRequest()}>Load mockToken</button>
+      <button onClick={loginRequest}>Load mockToken</button>
     </>
   );
 };
