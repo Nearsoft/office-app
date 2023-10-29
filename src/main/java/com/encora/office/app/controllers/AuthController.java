@@ -1,21 +1,18 @@
 package com.encora.office.app.controllers;
 
+import com.encora.office.app.models.request.LoginRequest;
+import com.encora.office.app.models.request.SignUpRequest;
+import com.encora.office.app.models.response.AuthenticationResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.encora.office.app.models.entity.User;
-import com.encora.office.app.services.AuthService;
+import com.encora.office.app.services.AuthServiceImpl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.encora.office.app.constants.Resources.AUTH;
-
-import java.util.Optional;
+import static com.encora.office.app.constants.Constants.AUTH;
 
 @Slf4j
 @RestController
@@ -23,15 +20,31 @@ import java.util.Optional;
 @RequestMapping(AUTH)
 public class AuthController {
 
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
-    @PostMapping(path = "/singup")
-    public ResponseEntity<User> singup(@RequestBody User user) {
-        log.debug("Singup user with provided data: {}", user.getEmail());
+    @PostMapping(path = "/signup")
+    public ResponseEntity<AuthenticationResponse> signup(@RequestBody SignUpRequest signUpRequest) {
+        log.debug("signup user with provided data: {}", signUpRequest.getEmail());
 
-        User createdUser = authService.singup(user);
+        AuthenticationResponse signUpResponse = authService.signup(signUpRequest);
+        log.debug("signUpResponse {}", signUpResponse.toString());
 
-        return new ResponseEntity<>(createdUser, HttpStatus.OK);
+        return new ResponseEntity<>(signUpResponse, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
+        log.debug("Login try for user {}", loginRequest.getEmail());
+
+        AuthenticationResponse loginResponse = authService.login(loginRequest);
+
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/whoami")
+    public ResponseEntity<AuthenticationResponse> whoami() {
+        AuthenticationResponse loginResponse = authService.whoami();
+
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+    }
 }

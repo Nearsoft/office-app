@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class ServiceException extends RuntimeException {
-
     private HttpStatus httpStatus;
     private String messageDetails;
     private String errorCode;

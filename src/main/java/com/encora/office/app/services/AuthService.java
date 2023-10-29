@@ -1,55 +1,19 @@
 package com.encora.office.app.services;
 
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.validation.Validator;
-
-import org.springframework.stereotype.Service;
-
 import com.encora.office.app.models.entity.User;
-import com.encora.office.app.repositories.UserRepository;
-import com.encora.office.app.services.validator.AuthValidator;
+import com.encora.office.app.models.request.LoginRequest;
+import com.encora.office.app.models.request.SignUpRequest;
+import com.encora.office.app.models.response.AuthenticationResponse;
 
-import static com.encora.office.app.util.TokenUtil.generateRandomString;
+public interface AuthService {
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+    public AuthenticationResponse login(LoginRequest user);
 
-@Slf4j
-@Service
-@AllArgsConstructor
-public class AuthService implements IAuthService {
+    public AuthenticationResponse signup(SignUpRequest user);
 
-    private UserRepository userRepository;
-    private AuthValidator authValidator;
+    public AuthenticationResponse whoami();
 
-    @Override
-    public User login(User user) {
-        throw new UnsupportedOperationException("Unimplemented method 'login'");
-    }
+//    public boolean forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
 
-    @Override
-    public User singup(User user) {
-        authValidator.validateSignUpRequest(user);
-
-        user.setSecret(generateRandomString());
-
-        User createdUser = userRepository.save(user);
-
-        return createdUser;
-
-        // Generate random safe secret
-    }
-
-    @Override
-    public User whoami() {
-        throw new UnsupportedOperationException("Unimplemented method 'whoami'");
-    }
-
-    @Override
-    public void forgotPassword(User user) {
-        throw new UnsupportedOperationException("Unimplemented method 'forgotPassword'");
-    }
-
+//    public AuthenticationResponse restorePassword(RestorePasswordRequest restorePasswordRequest);
 }

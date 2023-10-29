@@ -1,4 +1,4 @@
-package com.encora.app;
+package com.encora.office.app;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

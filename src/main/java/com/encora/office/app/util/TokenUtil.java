@@ -1,30 +1,36 @@
 package com.encora.office.app.util;
 
-import java.time.LocalDate;
+import com.encora.office.app.models.DecodedToken;
+import com.encora.office.app.models.entity.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import com.encora.office.app.models.entity.User;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
+import static com.encora.office.app.constants.Constants.*;
+import static com.encora.office.app.exception.ExceptionBuilder.buildServiceValidationException;
 
 @Slf4j
+@Component
 public class TokenUtil {
   @Value("${jwt.expiration}")
   private long JWT_TOKEN_EXP;
 
   @Value("${jwt.signature-algorithm}")
   private SignatureAlgorithm SIGNATURE_ALGORITHM;
-
-  private static final String TOKEN_EXP = "exp";
 
   public static boolean isValidToken(String encodedToken, String userSecret) {
     boolean validToken = false;
@@ -40,7 +46,31 @@ public class TokenUtil {
   }
 
   public static String getUserFromJWT(String token) {
+    log.debug("Get user from token: {}", token);
     return getClaimFromToken(token, Claims::getSubject);
+  }
+
+  public static String getUserFromJWTWithoutSecret(String token) {
+    log.debug("Get user from encoded token: {}", token);
+    DecodedToken decodedToken;
+
+    try {
+      decodedToken = getDecoded(token);
+    } catch (JsonProcessingException e) {
+      throw buildServiceValidationException(":", "");
+    }
+
+    return decodedToken.getSub();
+  }
+
+  public static DecodedToken getDecoded(String encodedToken) throws JsonProcessingException {
+    String[] pieces = encodedToken.split("\\.");
+    String b64payload = pieces[1];
+    String jsonToken = new String(Base64.decodeBase64(b64payload), StandardCharsets.UTF_8);
+    log.debug("Decoded token json: {}", jsonToken);
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    return objectMapper.readValue(jsonToken, DecodedToken.class);
   }
 
   public Date getExpirationDateFromToken(String token) {
@@ -70,10 +100,15 @@ public class TokenUtil {
   }
 
   public String buildJWT(User user) {
-    long now = LocalDate.now().toEpochDay();
+    long now = Instant.now().toEpochMilli();
 
     Map<String, Object> claims = new HashMap<>();
     claims.put(TOKEN_EXP, now + JWT_TOKEN_EXP);
+    claims.put(USER, user.getEmail());
+    claims.put(ROLE, user.getRole());
+    claims.put(ID, user.getId());
+    claims.put(NAME, user.getName());
+    claims.put(LAST_NAME, user.getLastName());
 
     return doGenerateToken(claims, user.getEmail(), user.getSecret(), new Date(now));
   }

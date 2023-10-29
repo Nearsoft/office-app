@@ -1,17 +1,16 @@
 package com.encora.office.app.controllers;
 
+import com.encora.office.app.models.entity.User;
+import com.encora.office.app.services.UserServiceImpl;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
-import com.encora.office.app.models.entity.User;
-import com.encora.office.app.services.UserService;
-
-import static com.encora.office.app.constants.Resources.USERS;
+import static com.encora.office.app.constants.Constants.USERS;
 
 @Slf4j
 @RestController
@@ -19,23 +18,23 @@ import static com.encora.office.app.constants.Resources.USERS;
 @RequestMapping(USERS)
 public class UserController {
 
-	private final UserService userService;
+	private final UserServiceImpl userServiceImpl;
 
 	@GetMapping
 	public List<User> getUsers() {
 		log.debug("Retrieve all users");
 
-		return userService.getUsers();
+		return userServiceImpl.getUsers();
 	}
 
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody User user) {
-		return ResponseEntity.ok(userService.createUser(user));
+		return ResponseEntity.ok(userServiceImpl.createUser(user));
 	}
 
 	@GetMapping("/{id}")
 	public Optional<User> getUser(@PathVariable String id) {
-		return userService.findById(id);
+		return userServiceImpl.findById(id);
 	}
 
 	@PutMapping("/{id}")
@@ -47,6 +46,6 @@ public class UserController {
 		if (!userToUpdate.isPresent())
 			return ResponseEntity.notFound().build();
 
-		return ResponseEntity.ok(userService.updateUser(user));
+		return ResponseEntity.ok(userServiceImpl.updateUser(user));
 	}
 }

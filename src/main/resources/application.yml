@@ -1,6 +1,8 @@
 
 
 spring:
+  # main:
+  #   allow-circular-references: true
   profiles:
     include: database
 
@@ -23,3 +25,11 @@ logging:
 jwt:
   expiration: 86400000 # Expiration time in ms (24h)
   signature-algorithm: HS512
+
+
+office:
+  name: Oficina Merida
+  spots: 30
+  schedule:
+    start-hour: 7
+    end-hour: 21
