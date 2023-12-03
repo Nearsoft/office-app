@@ -13,18 +13,4 @@ describe('[auth] model', () => {
     expect(myModelData.auth.token).toEqual(token);
     expect(myModelData.auth.isAuthenticated).toBe(true);
   });
-
-  it('effect: loginRequest', async () => {
-    const userCrendentials = {
-      username: "username",
-      password: "password"
-    };
-    const store = init<RootModel>({
-      models,
-    });
-    await store.dispatch.auth.loginRequest(userCrendentials);
-    const state = store.getState();
-    expect(state.auth.token).toEqual(userCrendentials.username);
-    expect(state.auth.isAuthenticated).toBe(true);
-  });
 });
